@@ -37,9 +37,16 @@ h1 {
   font-size: 16px;
 }
 
+.hint{
+  margin-top: 10px;
+  font-size: 14px;
+  color: #ff2d7a;
+  min-height: 18px;
+}
+
 .btn-area {
   position: relative;
-  height: 140px;
+  height: 150px;
   margin-top: 10px;
 }
 
@@ -63,7 +70,7 @@ h1 {
   color: white;
   position: absolute;
   left: 50%;
-  top: 18px;
+  top: 20px;
   transform: translateX(-50%);
   box-shadow: 0 12px 30px rgba(255,45,122,0.35);
 }
@@ -73,7 +80,12 @@ h1 {
   color: #222;
   position: absolute;
   left: 55%;
-  top: 78px;
+  top: 90px;
+}
+
+/* This makes "No" movement smooth when it runs away */
+.no.runaway {
+  transition: left 0.12s ease, top 0.12s ease, transform 0.12s ease;
 }
 
 .gif {
@@ -84,7 +96,7 @@ h1 {
 }
 
 .hidden {
-  display: none;
+  display: none !important;
 }
 
 .again {
