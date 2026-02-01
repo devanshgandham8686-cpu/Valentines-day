@@ -5,7 +5,12 @@ const btnArea = document.getElementById("btnArea");
 const card = document.getElementById("card");
 const celebrate = document.getElementById("celebrate");
 const againBtn = document.getElementById("againBtn");
+const hintText = document.getElementById("hintText");
 
+// FRAME control
+let frame = 1;
+
+// Move No button inside the button area
 function moveNoButton() {
   const areaRect = btnArea.getBoundingClientRect();
   const btnRect = noBtn.getBoundingClientRect();
@@ -20,23 +25,38 @@ function moveNoButton() {
 
   noBtn.style.left = `${randX}px`;
   noBtn.style.top = `${randY}px`;
+  noBtn.style.transform = `rotate(${Math.random() * 20 - 10}deg)`;
 }
 
-// Desktop hover
-noBtn.addEventListener("mouseenter", moveNoButton);
-
-// Mobile tap
-noBtn.addEventListener("touchstart", (e) => {
-  e.preventDefault();
-  moveNoButton();
-}, { passive: false });
-
-// If clicked somehow
+// FRAME 1 → clicking No takes you to Frame 2
 noBtn.addEventListener("click", (e) => {
-  e.preventDefault();
-  moveNoButton();
+  if (frame === 1) {
+    e.preventDefault();
+    frame = 2;
+    hintText.innerText = "Try clicking No now 😈";
+    noBtn.classList.add("runaway");
+    moveNoButton();
+  } else {
+    // in frame 2 clicking No is not allowed
+    e.preventDefault();
+    moveNoButton();
+  }
 });
 
+// FRAME 2 → hovering No runs away
+noBtn.addEventListener("mouseenter", () => {
+  if (frame === 2) moveNoButton();
+});
+
+// Mobile touch also runs away
+noBtn.addEventListener("touchstart", (e) => {
+  if (frame === 2) {
+    e.preventDefault();
+    moveNoButton();
+  }
+}, { passive: false });
+
+// YES → Frame 3
 yesBtn.addEventListener("click", () => {
   card.classList.add("hidden");
   celebrate.classList.remove("hidden");
@@ -56,11 +76,23 @@ yesBtn.addEventListener("click", () => {
   }
 });
 
+// Replay
 againBtn.addEventListener("click", () => {
   celebrate.classList.add("hidden");
   card.classList.remove("hidden");
+
+  // reset to frame 1
+  frame = 1;
+  hintText.innerText = "";
+  noBtn.classList.remove("runaway");
+
+  // reset No position
+  noBtn.style.left = "55%";
+  noBtn.style.top = "90px";
+  noBtn.style.transform = "none";
 });
 
+// falling hearts animation
 const style = document.createElement("style");
 style.innerHTML = `
 @keyframes fall {
@@ -70,5 +102,3 @@ style.innerHTML = `
   }
 }`;
 document.head.appendChild(style);
-
-moveNoButton();
